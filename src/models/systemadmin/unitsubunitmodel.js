@@ -2,12 +2,8 @@ const mongoose = require('mongoose');
 
 const { Schema, model } = mongoose;
 
-const unitsubunitSchema = new Schema({
+const unitSubunitSchema = new Schema({
     "__v": {
-        "type": "number",
-        "select": false
-    },
-    "_id": {
         "type": "number",
         "select": false
     },
@@ -38,5 +34,5 @@ const unitsubunitSchema = new Schema({
     }
 });
 
-module.exports = model('SystemAdminUnitSubunit', unitsubunitSchema);
+module.exports = model('UnitSubunitModel', unitSubunitSchema);
 

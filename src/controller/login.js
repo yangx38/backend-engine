@@ -1,6 +1,7 @@
 const SystemAdminModel = require('../models/login/systemadminmodel');
 
 class LoginCtl {
+    // TEST DATA: 
     async createOneSystemAdministrator(ctx) { 
         const systemAdmin = await new SystemAdminModel(ctx.request.body).save();
         ctx.body = systemAdmin
