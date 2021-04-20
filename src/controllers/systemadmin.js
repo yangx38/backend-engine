@@ -1,15 +1,44 @@
-// 内存数据库
-const SystemAdminUnitSubunit = require('../models/unitsubunit');
+const SystemAdminUnitSubunit = require('../models/systemadmin/unitsubunit');
 
 class SystemAdminCtl {
     async find(ctx) { 
         ctx.body  = await SystemAdminUnitSubunit.find();
     }
     async create(ctx) { 
-        // db.push(ctx.request.body);
-        // ctx.body = ctx.request.body;
         ctx.verifyParams({
-            name: { type: 'string', required: true},
+            "__v": {
+                "type": "number",
+                "select": false
+            },
+            "_id": {
+                "type": "number",
+                "select": false
+            },
+            "key": {
+                "type": "string",
+                "required" : true,
+            },
+            "name": {
+                "type": "string",
+                "required" : true,
+            },
+            "children": {
+                "type": "array",
+                "required" : false,
+                "items": [
+                    {
+                    "type": "object",
+                    "properties": {
+                        "key": {
+                            "type": "string"
+                            },
+                            "name": {
+                            "type": "string"
+                            }
+                        }
+                    }
+                ]
+            }
         })
         const unitsubunit = await new SystemAdminUnitSubunit(ctx.request.body).save();
         ctx.body = unitsubunit

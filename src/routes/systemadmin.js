@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-const router = new Router({prefix:'/systemadmin'});
+const router = new Router({prefix:'/api/systemadmin'});
 const { find, findById, create, update, delete: del} = require('../controllers/systemadmin');
 
 router.get('/', find)
