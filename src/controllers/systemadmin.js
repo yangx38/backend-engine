@@ -1,24 +1,43 @@
 // 内存数据库
-const db = [{name: 'lei'}];
+const SystemAdminUnitSubunit = require('../models/unitsubunit');
 
 class SystemAdminCtl {
-    find(ctx) { 
-        ctx.body  = db;
+    async find(ctx) { 
+        ctx.body  = await SystemAdminUnitSubunit.find();
     }
-    create(ctx) { 
-        db.push(ctx.request.body);
-        ctx.body = ctx.request.body;
+    async create(ctx) { 
+        // db.push(ctx.request.body);
+        // ctx.body = ctx.request.body;
+        ctx.verifyParams({
+            name: { type: 'string', required: true},
+        })
+        const unitsubunit = await new SystemAdminUnitSubunit(ctx.request.body).save();
+        ctx.body = unitsubunit
     }
-    findById(ctx) { 
-        ctx.body = db[ctx.params.id * 1];
+    async findById(ctx) { 
+        const unit = await SystemAdminUnitSubunit.findById(ctx.params.id);
+        if (!unit) {
+            ctx.throw(404, 'unit does not exist');
+        }
+        ctx.body = unit
+        // ctx.body = db[ctx.params.id * 1];
     }
-    update(ctx) { 
-        db[ctx.params.id * 1] = ctx.request.body;
-        ctx.body = ctx.request.body;
+    async update(ctx) { 
+        // db[ctx.params.id * 1] = ctx.request.body;
+        // ctx.body = ctx.request.body;
+        ctx.verifyParams({
+            name: { type: 'string', required: true},
+        })
+        const unitsubunit = await SystemAdminUnitSubunit.findByIdAndUpdate(ctx.request.id, ctx.request.body);
+        if (!unitsubunit) { ctx.throw(404); }
+        ctx.body = unitsubunit
     }
-    delete(ctx) { 
-        db.splice(ctx.params.id*1, 1);
-        ctx.status = 204;
+    async delete(ctx) { 
+        // db.splice(ctx.params.id*1, 1);
+        // ctx.status = 204;
+        const unitsubunit = await SystemAdminUnitSubunit.findByIdAndRemove(ctx.params.id);
+        if (!unitsubunit) { ctx.throw(404); }
+        ctx.status = 404;
     }
 }
 
