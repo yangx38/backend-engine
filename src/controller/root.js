@@ -1,7 +1,7 @@
-class HomeCtl {
+class RootCtl {
     index(ctx) {
         ctx.body = 'backend engine';
     }
 }
 
-module.exports = new HomeCtl();
+module.exports = new RootCtl();
