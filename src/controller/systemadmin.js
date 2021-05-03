@@ -18,7 +18,6 @@ class SystemAdminCtl {
         })
         ctx.body = allSubunits;
     }
-
     // PeopleModel
     async getAllPeople(ctx) { 
         const allPeople = await PeopleModel.find({}, '-_id');
@@ -74,12 +73,14 @@ class SystemAdminCtl {
         })
         ctx.body = peopleOfSubunitFlat;
     }
-
-
     // BudgetModel
     async getAllBudgets(ctx) { 
         ctx.body = await BudgetModel.find({}, '-_id budgetnumber budgetname startdate enddate');
     }
+
+
+
+    
 
     // async createOneUnitSubunit(ctx) { 
     //     const systemAdmin = await new UnitSubunitModel(ctx.request.body).save();

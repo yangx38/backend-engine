@@ -1,8 +1,9 @@
 const Router = require('koa-router');
 const loginRouter = new Router({prefix:'/api/login'});
-const { createOneSystemAdministrator, checkWhetherUserIsSystemAdministrator } = require('../controller/login');
+// SystemAdminModel
+const { checkWhetherUserIsSystemAdministrator } = require('../controller/login');
 
-loginRouter.post('/createOneSystemAdministrator', createOneSystemAdministrator);
+// SystemAdminModel
 loginRouter.get('/checkWhetherUserIsSystemAdministrator/:netId', checkWhetherUserIsSystemAdministrator);
 
 
