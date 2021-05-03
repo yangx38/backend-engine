@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 const systemAdminRouter = new Router({prefix:'/api/systemadmin'});
 // UnitSubunitModel
-const { getAllUnitSubunit, getAllSubunits } = require('../controller/systemadmin');
+const { getAllUnitSubunit, getAllSubunits, getPeopleOfSubunit } = require('../controller/systemadmin');
 // PeopleModel
 const { getAllPeople, getPeopleOfUnit } = require('../controller/systemadmin');
 // BudgetModel
@@ -14,7 +14,8 @@ systemAdminRouter.get('/getAllSubunits', getAllSubunits);
 
 // PeopleModel
 systemAdminRouter.get('/getAllPeople', getAllPeople);
-systemAdminRouter.get('/getPeople/:unit', getPeopleOfUnit);
+systemAdminRouter.get('/getPeopleOfUnit/:unit', getPeopleOfUnit);
+systemAdminRouter.get('/getPeopleOfSubunit/:subunit', getPeopleOfSubunit);
 
 // BudgetModel
 systemAdminRouter.get('/getAllBudgets', getAllBudgets);

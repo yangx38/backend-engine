@@ -56,6 +56,24 @@ class SystemAdminCtl {
         })
         ctx.body = peopleOfUnitFlat;
     }
+    async getPeopleOfSubunit(ctx) { 
+        const peopleOfSubunit = await PeopleModel.find({ subunit: `${ctx.params.subunit}`});
+        if (!peopleOfSubunit) { ctx.throw(404); }
+        var peopleOfSubunitFlat = [];
+        peopleOfSubunit.map(cur => {
+            const { submitters, fiscalstaffs, subunit } = cur;
+            const subunitname = subunit.split('@')[0];
+            submitters.map(submitter => {
+                const { name, netId } = submitter;
+                peopleOfSubunitFlat.push({'name': name, 'netId': netId, 'type': 'submitter', 'subunit': subunitname})
+            })
+            fiscalstaffs.map(fiscalstaff => {
+                const { name, netId } = fiscalstaff;
+                peopleOfSubunitFlat.push({'name': name, 'netId': netId, 'type': 'fiscalstaff', 'subunit': subunitname})
+            })
+        })
+        ctx.body = peopleOfSubunitFlat;
+    }
 
 
     // BudgetModel
