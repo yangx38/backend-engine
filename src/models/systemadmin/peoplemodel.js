@@ -7,7 +7,11 @@ const peopleSchema = new Schema({
     type: "number",
     select: false,
   },
-  key: {
+  subunit: {
+    type: "string",
+    required: true,
+  },
+  unit: {
     type: "string",
     required: true,
   },

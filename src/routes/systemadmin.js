@@ -3,7 +3,7 @@ const systemAdminRouter = new Router({prefix:'/api/systemadmin'});
 // UnitSubunitModel
 const { getAllUnitSubunit, getAllSubunits } = require('../controller/systemadmin');
 // PeopleModel
-const { getAllPeople } = require('../controller/systemadmin');
+const { getAllPeople, getPeopleOfUnit } = require('../controller/systemadmin');
 // BudgetModel
 const { getAllBudgets } = require('../controller/systemadmin');
 // const { getAllUnitSubunit, createOneUnitSubunit, getAllSubunits, updateUnitWithSubunits } = require('../controller/systemadmin');
@@ -14,6 +14,7 @@ systemAdminRouter.get('/getAllSubunits', getAllSubunits);
 
 // PeopleModel
 systemAdminRouter.get('/getAllPeople', getAllPeople);
+systemAdminRouter.get('/getPeople/:unit', getPeopleOfUnit);
 
 // BudgetModel
 systemAdminRouter.get('/getAllBudgets', getAllBudgets);

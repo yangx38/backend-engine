@@ -24,19 +24,37 @@ class SystemAdminCtl {
         const allPeople = await PeopleModel.find({}, '-_id');
         var peopleTableDataSource = [];
         allPeople.map(cur => {
-            const { submitters, fiscalstaffs, key } = cur;
-            const subunit = key.split('@')[0];
+            const { submitters, fiscalstaffs, subunit } = cur;
+            const subunitname = subunit.split('@')[0];
             submitters.map(submitter => {
                 const { name, netId } = submitter;
-                peopleTableDataSource.push({'name': name, 'netId': netId, 'type': 'submitter', 'subunit': subunit})
+                peopleTableDataSource.push({'name': name, 'netId': netId, 'type': 'submitter', 'subunit': subunitname})
             })
             fiscalstaffs.map(fiscalstaff => {
                 const { name, netId } = fiscalstaff;
-                peopleTableDataSource.push({'name': name, 'netId': netId, 'type': 'fiscalstaff', 'subunit': subunit})
+                peopleTableDataSource.push({'name': name, 'netId': netId, 'type': 'fiscalstaff', 'subunit': subunitname})
             })
             return peopleTableDataSource
         })
         ctx.body = peopleTableDataSource;
+    }
+    async getPeopleOfUnit(ctx) { 
+        const peopleOfUnit = await PeopleModel.find({ unit: `${ctx.params.unit}`});
+        if (!peopleOfUnit) { ctx.throw(404); }
+        var peopleOfUnitFlat = [];
+        peopleOfUnit.map(cur => {
+            const { submitters, fiscalstaffs, subunit } = cur;
+            const subunitname = subunit.split('@')[0];
+            submitters.map(submitter => {
+                const { name, netId } = submitter;
+                peopleOfUnitFlat.push({'name': name, 'netId': netId, 'type': 'submitter', 'subunit': subunitname})
+            })
+            fiscalstaffs.map(fiscalstaff => {
+                const { name, netId } = fiscalstaff;
+                peopleOfUnitFlat.push({'name': name, 'netId': netId, 'type': 'fiscalstaff', 'subunit': subunitname})
+            })
+        })
+        ctx.body = peopleOfUnitFlat;
     }
 
 
