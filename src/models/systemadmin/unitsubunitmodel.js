@@ -35,3 +35,17 @@ const unitSubunitSchema = new Schema({
 });
 
 module.exports = model("UnitSubunitModel", unitSubunitSchema);
+
+// unit's id: key
+// subunit's id: children key
+
+// {
+//     "children": [
+//         {
+//             "key": "Aeronautics & Astronautics@AA Test Lab 1",
+//             "name": "AA Test Lab 1"
+//         }
+//     ],
+//     "key": "Aeronautics & Astronautics",
+//     "name": "Aeronautics & Astronautics"
+// }

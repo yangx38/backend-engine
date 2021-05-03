@@ -1,9 +1,50 @@
 const UnitSubunitModel = require('../models/systemadmin/unitsubunitmodel');
+const BudgetModel = require('../models/systemadmin/budgetmodel');
+const PeopleModel = require('../models/systemadmin/peoplemodel');
 
 class SystemAdminCtl {
+    // UnitSubunitModel
     async getAllUnitSubunit(ctx) { 
         ctx.body = await UnitSubunitModel.find({}, '-_id');
     }
+    async getAllSubunits(ctx) {
+        const allChildren = await UnitSubunitModel.find({}, 'children');
+        var allSubunits = [];
+        allChildren.map(cur => {
+            const { children } = cur;
+            return children.map(item => {
+                allSubunits.push(item.key)
+            })
+        })
+        ctx.body = allSubunits;
+    }
+
+    // PeopleModel
+    async getAllPeople(ctx) { 
+        const allPeople = await PeopleModel.find({}, '-_id');
+        var peopleTableDataSource = [];
+        allPeople.map(cur => {
+            const { submitters, fiscalstaffs, key } = cur;
+            const subunit = key.split('@')[0];
+            submitters.map(submitter => {
+                const { name, netId } = submitter;
+                peopleTableDataSource.push({'name': name, 'netId': netId, 'type': 'submitter', 'subunit': subunit})
+            })
+            fiscalstaffs.map(fiscalstaff => {
+                const { name, netId } = fiscalstaff;
+                peopleTableDataSource.push({'name': name, 'netId': netId, 'type': 'fiscalstaff', 'subunit': subunit})
+            })
+            return peopleTableDataSource
+        })
+        ctx.body = peopleTableDataSource;
+    }
+
+
+    // BudgetModel
+    async getAllBudgets(ctx) { 
+        ctx.body = await BudgetModel.find({}, '-_id budgetnumber budgetname startdate enddate');
+    }
+
     // async createOneUnitSubunit(ctx) { 
     //     const systemAdmin = await new UnitSubunitModel(ctx.request.body).save();
     //     ctx.body = systemAdmin
