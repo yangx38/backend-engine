@@ -33,7 +33,6 @@ class SystemAdminCtl {
                 const { name, netId } = fiscalstaff;
                 peopleTableDataSource.push({'name': name, 'netId': netId, 'type': 'fiscalstaff', 'subunit': subunitname})
             })
-            return peopleTableDataSource
         })
         ctx.body = peopleTableDataSource;
     }
