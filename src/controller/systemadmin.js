@@ -74,7 +74,7 @@ class SystemAdminCtl {
     }
     // BudgetModel
     async getAllBudgets(ctx) { 
-        ctx.body = await BudgetModel.find({}, '-_id budgetnumber budgetname startdate enddate');
+        ctx.body = await BudgetModel.find({}, '-_id budgetnumber budgetname');
     }
 
 
