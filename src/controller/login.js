@@ -1,5 +1,6 @@
 const SystemAdminModel = require('../models/login/systemadminmodel');
-const PeopleModel = require('../models/systemadmin/peoplemodel');
+const SubmitterModel = require('../models/systemadmin/submittermodel');
+const FiscalStaffModel = require('../models/systemadmin/fiscalstaffmodel');
 
 class LoginCtl {
     // SystemAdminModel
@@ -8,13 +9,12 @@ class LoginCtl {
         if (res.length > 0) ctx.body = 1;
         else ctx.body = 0;
     }
-    // PeopleModel
-    async checkWhetherUserIsFiscalStaff_OR_Submitter(ctx) {
-        const allPeople = await PeopleModel.find({}, '-_id');
+    // SubmitterModel
+    async checkWhetherUserIsSubmitter(ctx) {
+        const allSubmitter = await SubmitterModel.find({}, '-_id');
         var submitterMap = new Map();
-        var fiscalStaffMap = new Map();
-        allPeople.map(cur => {
-            const { submitters, fiscalstaffs, subunit } = cur;
+        allSubmitter.map(cur => {
+            const { submitters, subunit } = cur;
             const subunitname = subunit.split('@')[0];
             const unitname = subunit.split('@')[1];
             submitters.map(submitter => {
@@ -24,50 +24,31 @@ class LoginCtl {
                     submitterMap.get(unitname).push(subunitname);
                 }
             })
-            fiscalstaffs.map(fiscalstaff => {
-                const { netId } = fiscalstaff;
-                if (!fiscalStaffMap.get(unitname)) fiscalStaffMap.set(unitname, []);
-                if (netId === `${ctx.params.netId}`) {
-                    fiscalStaffMap.get(unitname).push(subunitname);
-                }
-            })
         })
         var submitterJSON = [];  
         submitterMap.forEach((val, key) => {
-            submitterJSON.push({'unit': key, 'subunits': submitterMap.get(key)})
+            const subunits = submitterMap.get(key);
+            if (subunits.length > 0) {
+                submitterJSON.push({'unit': key, 'subunits': subunits})
+            }
         });
-        var fiscalStaffJSON = [];  
-        fiscalStaffMap.forEach((val, key) => {
-            fiscalStaffJSON.push({'unit': key, 'subunits': fiscalStaffMap.get(key).sort()})
-        });
-        ctx.body = {'submitterSubunitsOfGivenNetId': submitterJSON, 'fiscalStaffSubunitsOfGivenNetId': fiscalStaffJSON};
-        //ctx.body = submitterMap;
-       // ctx.body = {'submitterSubunitsOfGivenNetId': submitterSubunitsOfGivenNetId, 'fiscalStaffSubunitsOfGivenNetId': fiscalStaffSubunitsOfGivenNetId};
-        // const allPeople = await PeopleModel.find({}, '-_id');
-        // var submitterSubunitsOfGivenNetId = [];
-        // var fiscalStaffSubunitsOfGivenNetId = [];
-        // allPeople.map(cur => {
-        //     const { submitters, fiscalstaffs, subunit } = cur;
-        //     submitters.map(submitter => {
-        //         const { netId } = submitter;
-        //         if (netId === `${ctx.params.netId}`) {
-        //             submitterSubunitsOfGivenNetId.push(subunit)
-        //         }
-        //     })
-        //     fiscalstaffs.map(fiscalstaff => {
-        //         const { netId } = fiscalstaff;
-        //         if (netId === `${ctx.params.netId}`) {
-        //             fiscalStaffSubunitsOfGivenNetId.push(subunit)
-        //         }
-        //     })
-        // })
-        // ctx.body = {'submitterSubunitsOfGivenNetId': submitterSubunitsOfGivenNetId, 'fiscalStaffSubunitsOfGivenNetId': fiscalStaffSubunitsOfGivenNetId};
+        ctx.body = {'submitterSubunitsOfGivenNetId': submitterJSON};
     }
-
-
-        // async createOneSFiscalStaffModel(ctx) { 
-        // const systemAdmin = await new FiscalStaffModel(ctx.request.body).save();
-        // ctx.body = systemAdmin
+    // FiscalStaffModel
+    async checkWhetherUserIsFiscalStaff(ctx) {
+        const allFiscalStaff = await FiscalStaffModel.find({}, '-_id');
+        var fiscalstaffJSON = [];  
+        allFiscalStaff.map(cur => {
+            const { fiscalstaffs, unit } = cur;
+            fiscalstaffs.map(fiscalstaff => {
+                const { netId } = fiscalstaff;
+                if (netId === `${ctx.params.netId}`) {
+                    fiscalstaffJSON.push(unit)
+                }
+            })
+        })
+        ctx.body = {'fiscalStaffUnitsOfGivenNetId': fiscalstaffJSON};
+    }
 }
 
 module.exports = new LoginCtl();

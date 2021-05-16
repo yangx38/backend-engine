@@ -1,28 +1,34 @@
 const Router = require('koa-router');
 const systemAdminRouter = new Router({prefix:'/api/systemadmin'});
+// *************************** Models ***************************
 // UnitSubunitModel
-const { getAllUnitSubunit, getAllSubunits, getPeopleOfSubunit } = require('../controller/systemadmin');
-// PeopleModel
-const { getAllPeople, getPeopleOfUnit } = require('../controller/systemadmin');
+const { getAllUnitSubunit } = require('../controller/systemadmin');
+// SubmitterModel
+const { getAllSubmitter } = require('../controller/systemadmin');
+// FiscalStaffModel
+const { getAllFiscalStaff } = require('../controller/systemadmin');
 // BudgetModel
 const { getAllBudgets } = require('../controller/systemadmin');
-// const { getAllUnitSubunit, createOneUnitSubunit, getAllSubunits, updateUnitWithSubunits } = require('../controller/systemadmin');
 
+// *************************** Routes ***************************
 // UnitSubunitModel
 systemAdminRouter.get('/getAllUnitSubunit', getAllUnitSubunit);
-systemAdminRouter.get('/getAllSubunits', getAllSubunits);
-
-// PeopleModel
-systemAdminRouter.get('/getAllPeople', getAllPeople);
-systemAdminRouter.get('/getPeopleOfUnit/:unit', getPeopleOfUnit);
-systemAdminRouter.get('/getPeopleOfSubunit/:subunit', getPeopleOfSubunit);
-
+// SubmitterModel
+systemAdminRouter.get('/getAllSubmitter', getAllSubmitter);
+// FiscalStaffModel
+systemAdminRouter.get('/getAllFiscalStaff', getAllFiscalStaff);
 // BudgetModel
 systemAdminRouter.get('/getAllBudgets', getAllBudgets);
 
 
-// systemAdminRouter.post('/createOneUnitSubunit', createOneUnitSubunit);
-// systemAdminRouter.get('/getAllSubunits/:unitname', getAllSubunits);
-// systemAdminRouter.post('/updateUnitWithSubunits/:unitname', updateUnitWithSubunits);
+
+
+
+
+
+// Test Data: 
+const { createOneSubmitter, createOneFiscalStaff } = require('../controller/systemadmin');
+systemAdminRouter.post('/createOneSubmitter', createOneSubmitter);
+systemAdminRouter.post('/createOneFiscalStaff', createOneFiscalStaff);
 
 module.exports = systemAdminRouter;

@@ -1,76 +1,40 @@
 const UnitSubunitModel = require('../models/systemadmin/unitsubunitmodel');
+const SubmitterModel = require('../models/systemadmin/submittermodel');
+const FiscalStaffModel = require('../models/systemadmin/fiscalstaffmodel');
 const BudgetModel = require('../models/systemadmin/budgetmodel');
-const PeopleModel = require('../models/systemadmin/peoplemodel');
 
 class SystemAdminCtl {
     // UnitSubunitModel
     async getAllUnitSubunit(ctx) { 
         ctx.body = await UnitSubunitModel.find({}, '-_id');
     }
-    async getAllSubunits(ctx) {
-        const allChildren = await UnitSubunitModel.find({}, 'children');
-        var allSubunits = [];
-        allChildren.map(cur => {
-            const { children } = cur;
-            return children.map(item => {
-                allSubunits.push(item.key)
-            })
-        })
-        ctx.body = allSubunits;
-    }
-    // PeopleModel
-    async getAllPeople(ctx) { 
-        const allPeople = await PeopleModel.find({}, '-_id');
-        var peopleTableDataSource = [];
-        allPeople.map(cur => {
-            const { submitters, fiscalstaffs, subunit } = cur;
+    // SubmitterModel
+    async getAllSubmitter(ctx) { 
+        const allSubmitter = await SubmitterModel.find({}, '-_id');
+        var submitterDataSource = [];
+        allSubmitter.map(cur => {
+            const { submitters, subunit } = cur;
             const subunitname = subunit.split('@')[0];
+            const unitname = subunit.split('@')[1];
             submitters.map(submitter => {
-                const { name, netId } = submitter;
-                peopleTableDataSource.push({'name': name, 'netId': netId, 'type': 'submitter', 'subunit': subunitname})
-            })
-            fiscalstaffs.map(fiscalstaff => {
-                const { name, netId } = fiscalstaff;
-                peopleTableDataSource.push({'name': name, 'netId': netId, 'type': 'fiscalstaff', 'subunit': subunitname})
+                const { name, netId, key } = submitter;
+                submitterDataSource.push({'key': key, 'name': name, 'netId': netId, 'subunit': subunitname, 'unit': unitname, 'type': 'submitter'})
             })
         })
-        ctx.body = peopleTableDataSource;
+        ctx.body = submitterDataSource;
     }
-    async getPeopleOfUnit(ctx) { 
-        const peopleOfUnit = await PeopleModel.find({ unit: `${ctx.params.unit}`});
-        if (!peopleOfUnit) { ctx.throw(404); }
-        var peopleOfUnitFlat = [];
-        peopleOfUnit.map(cur => {
-            const { submitters, fiscalstaffs, subunit } = cur;
-            const subunitname = subunit.split('@')[0];
-            submitters.map(submitter => {
-                const { name, netId } = submitter;
-                peopleOfUnitFlat.push({'name': name, 'netId': netId, 'type': 'submitter', 'subunit': subunitname})
-            })
+    // FiscalStaffModel
+    async getAllFiscalStaff(ctx) { 
+        const allFiscalStaff = await FiscalStaffModel.find({}, '-_id');
+        var fiscalstaffDataSource = [];
+        allFiscalStaff.map(cur => {
+            const { fiscalstaffs, unit } = cur;
             fiscalstaffs.map(fiscalstaff => {
-                const { name, netId } = fiscalstaff;
-                peopleOfUnitFlat.push({'name': name, 'netId': netId, 'type': 'fiscalstaff', 'subunit': subunitname})
+                const { name, netId, key } = fiscalstaff;
+                fiscalstaffDataSource.push({'key': key, 'name': name, 'netId': netId, 'subunit': 'N/A', 'unit': unit, 'type': 'fiscal staff'})
             })
         })
-        ctx.body = peopleOfUnitFlat;
-    }
-    async getPeopleOfSubunit(ctx) { 
-        const peopleOfSubunit = await PeopleModel.find({ subunit: `${ctx.params.subunit}`});
-        if (!peopleOfSubunit) { ctx.throw(404); }
-        var peopleOfSubunitFlat = [];
-        peopleOfSubunit.map(cur => {
-            const { submitters, fiscalstaffs, subunit } = cur;
-            const subunitname = subunit.split('@')[0];
-            submitters.map(submitter => {
-                const { name, netId } = submitter;
-                peopleOfSubunitFlat.push({'name': name, 'netId': netId, 'type': 'submitter', 'subunit': subunitname})
-            })
-            fiscalstaffs.map(fiscalstaff => {
-                const { name, netId } = fiscalstaff;
-                peopleOfSubunitFlat.push({'name': name, 'netId': netId, 'type': 'fiscalstaff', 'subunit': subunitname})
-            })
-        })
-        ctx.body = peopleOfSubunitFlat;
+        ctx.body = fiscalstaffDataSource;
     }
     // BudgetModel
     async getAllBudgets(ctx) { 
@@ -80,11 +44,15 @@ class SystemAdminCtl {
 
 
     
-
-    // async createOneUnitSubunit(ctx) { 
-    //     const systemAdmin = await new UnitSubunitModel(ctx.request.body).save();
-    //     ctx.body = systemAdmin
-    // }
+    // Test Data: 
+    async createOneSubmitter(ctx) { 
+        const temp = await new SubmitterModel(ctx.request.body).save();
+        ctx.body = temp
+    }
+    async createOneFiscalStaff(ctx) { 
+        const temp = await new FiscalStaffModel(ctx.request.body).save();
+        ctx.body = temp
+    }
     // async getAllSubunits(ctx) { 
     //     const unit = await UnitSubunitModel.find({ name: `${ctx.params.unitname}`}, '-_id children');
     //     if (!unit) { ctx.throw(404); }
