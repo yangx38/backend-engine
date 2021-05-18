@@ -1,6 +1,6 @@
 const UnitSubunitModel = require('../models/systemadmin/unitsubunitmodel');
-const SubmitterModel = require('../models/systemadmin/submittermodel');
-const FiscalStaffModel = require('../models/systemadmin/fiscalstaffmodel');
+const SubmitterModel = require('../models/login/submittermodel');
+const FiscalStaffModel = require('../models/login/fiscalstaffmodel');
 const BudgetModel = require('../models/systemadmin/budgetmodel');
 
 class SystemAdminCtl {

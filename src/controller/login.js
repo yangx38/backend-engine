@@ -1,6 +1,6 @@
 const SystemAdminModel = require('../models/login/systemadminmodel');
-const SubmitterModel = require('../models/systemadmin/submittermodel');
-const FiscalStaffModel = require('../models/systemadmin/fiscalstaffmodel');
+const SubmitterModel = require('../models/login/submittermodel');
+const FiscalStaffModel = require('../models/login/fiscalstaffmodel');
 
 class LoginCtl {
     // SystemAdminModel
