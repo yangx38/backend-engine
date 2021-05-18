@@ -38,19 +38,23 @@ class SystemAdminCtl {
     }
     // BudgetModel
     async getAllBudgets(ctx) { 
-        ctx.body = await BudgetModel.find({}, '-_id budgetnumber budgetname');
+        ctx.body = await BudgetModel.find({}, '-_id');
     }
 
 
 
     
-    // Test Data: 
+    // *************************** Test Data: 
     async createOneSubmitter(ctx) { 
         const temp = await new SubmitterModel(ctx.request.body).save();
         ctx.body = temp
     }
     async createOneFiscalStaff(ctx) { 
         const temp = await new FiscalStaffModel(ctx.request.body).save();
+        ctx.body = temp
+    }
+    async createOneBudget(ctx) { 
+        const temp = await new BudgetModel(ctx.request.body).save();
         ctx.body = temp
     }
     // async getAllSubunits(ctx) { 

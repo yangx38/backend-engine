@@ -23,12 +23,12 @@ systemAdminRouter.get('/getAllBudgets', getAllBudgets);
 
 
 
-
-
-
-// Test Data: 
+// *************************** Test Data: 
 const { createOneSubmitter, createOneFiscalStaff } = require('../controller/systemadmin');
 systemAdminRouter.post('/createOneSubmitter', createOneSubmitter);
 systemAdminRouter.post('/createOneFiscalStaff', createOneFiscalStaff);
+
+const { createOneBudget } = require('../controller/systemadmin');
+systemAdminRouter.post('/createOneBudget', createOneBudget);
 
 module.exports = systemAdminRouter;

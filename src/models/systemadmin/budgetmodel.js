@@ -7,6 +7,10 @@ const budgetSchema = new Schema({
     type: "number",
     select: false,
   },
+  key: {
+    type: "string",
+    required: true,
+  },
   budgetnumber: {
     type: "string",
     required: true,
@@ -30,6 +34,10 @@ const budgetSchema = new Schema({
       {
         type: "object",
         properties: {
+          key: {
+            type: "string",
+            required: true,
+          },
           name: {
             type: "string",
             required: true,
@@ -51,20 +59,23 @@ const budgetSchema = new Schema({
 module.exports = model("BudgetModel", budgetSchema);
 
 // {
-//   "budgetnumber": "62-0372",
-//   "budgetname": "TSUNAMI EVACUATION S",
-//   "startdate": "10/15/19",
-//   "enddate": "6/30/20",
 //   "approvers": [
 //       {
+//           "key": "62-0372@dummy1",
 //           "name": "Dummy1",
 //           "netId": "dummy1",
 //           "amount": 10000
 //       },
 //       {
+//           "key": "62-0372@Dummy2",
 //           "name": "Dummy2",
 //           "netId": "dummy2",
 //           "amount": 100000
 //       }
-//   ]
-// }
+//   ],
+//   "key": "62-0372",
+//   "budgetnumber": "62-0372",
+//   "budgetname": "TSUNAMI EVACUATION S",
+//   "startdate": "10/15/19",
+//   "enddate": "6/30/20"
+// },
