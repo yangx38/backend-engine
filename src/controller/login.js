@@ -1,6 +1,8 @@
 const SystemAdminModel = require('../models/login/systemadminmodel');
-const SubmitterModel = require('../models/login/submittermodel');
 const FiscalStaffModel = require('../models/login/fiscalstaffmodel');
+const BudgetModel = require('../models/systemadmin/budgetmodel');
+const SubmitterModel = require('../models/login/submittermodel');
+
 
 class LoginCtl {
     // SystemAdminModel
@@ -9,6 +11,27 @@ class LoginCtl {
         if (res.length > 0) ctx.body = 1;
         else ctx.body = 0;
     }
+    // FiscalStaffModel
+    async checkWhetherUserIsFiscalStaff(ctx) {
+        const fiscalstaff = await FiscalStaffModel.find({"fiscalstaffs": {$elemMatch: {netId:`${ctx.params.netId}`}}}, '-_id unit');
+        var fiscalstaffJSON = [];
+        fiscalstaff.map(cur => {
+            const { unit } = cur;
+            fiscalstaffJSON.push(unit);
+        })
+        ctx.body = {'fiscalStaffUnitsOfGivenNetId': fiscalstaffJSON};
+    }
+    // BudgetModel
+    async checkWhetherUserIsApprover(ctx) {
+        const approver = await BudgetModel.find({"approvers": {$elemMatch: {netId:`${ctx.params.netId}`}}}, '-_id budgetnumber');
+        var approverJSON = [];
+        approver.map(cur => {
+            const { budgetnumber } = cur;
+            approverJSON.push(budgetnumber);
+        })
+        ctx.body = {'approverBudgetNumberssOfGivenNetId': approverJSON};
+    }
+
     // SubmitterModel
     async checkWhetherUserIsSubmitter(ctx) {
         const allSubmitter = await SubmitterModel.find({}, '-_id');
@@ -33,21 +56,6 @@ class LoginCtl {
             }
         });
         ctx.body = {'submitterSubunitsOfGivenNetId': submitterJSON};
-    }
-    // FiscalStaffModel
-    async checkWhetherUserIsFiscalStaff(ctx) {
-        const allFiscalStaff = await FiscalStaffModel.find({}, '-_id');
-        var fiscalstaffJSON = [];  
-        allFiscalStaff.map(cur => {
-            const { fiscalstaffs, unit } = cur;
-            fiscalstaffs.map(fiscalstaff => {
-                const { netId } = fiscalstaff;
-                if (netId === `${ctx.params.netId}`) {
-                    fiscalstaffJSON.push(unit)
-                }
-            })
-        })
-        ctx.body = {'fiscalStaffUnitsOfGivenNetId': fiscalstaffJSON};
     }
 }
 
