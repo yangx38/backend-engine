@@ -1,5 +1,11 @@
 # backend-engine
 
+从formmodels中 由人找
+{"used_budget": {$elemMatch: {"approvers": {$in: ["yangx38"]}}}}
+
+从formmodels中 由Budget找
+{"used_budget": {$elemMatch: {budgetnumber: "62-0372"}}}
+
 如果你要使用 await 的话, 必须在 async 的函数里面
 (async () => {
     const res = await fetch('//api.github.com/users')

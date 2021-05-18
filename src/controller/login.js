@@ -34,7 +34,7 @@ class LoginCtl {
 
     // SubmitterModel
     async checkWhetherUserIsSubmitter(ctx) {
-        const allSubmitter = await SubmitterModel.find({}, '-_id');
+        const allSubmitter = await SubmitterModel.find({"submitters": {$elemMatch: {netId: `${ctx.params.netId}`}}}, '-_id');
         var submitterMap = new Map();
         allSubmitter.map(cur => {
             const { submitters, subunit } = cur;
