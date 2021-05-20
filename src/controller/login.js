@@ -19,6 +19,7 @@ class LoginCtl {
             const { unit } = cur;
             fiscalstaffJSON.push(unit);
         })
+        fiscalstaffJSON.sort();
         ctx.body = {'fiscalStaffUnitsOfGivenNetId': fiscalstaffJSON};
     }
     // BudgetModel
@@ -29,6 +30,7 @@ class LoginCtl {
             const { budgetnumber } = cur;
             approverJSON.push(budgetnumber);
         })
+        approverJSON.sort();
         ctx.body = {'approverBudgetNumberssOfGivenNetId': approverJSON};
     }
 
@@ -51,10 +53,12 @@ class LoginCtl {
         var submitterJSON = [];  
         submitterMap.forEach((val, key) => {
             const subunits = submitterMap.get(key);
+            subunits.sort((a, b)=>a.localeCompare(b));
             if (subunits.length > 0) {
                 submitterJSON.push({'unit': key, 'subunits': subunits})
             }
         });
+        submitterJSON.sort((a, b)=>a.unit.localeCompare(b.unit));
         ctx.body = {'submitterSubunitsOfGivenNetId': submitterJSON};
     }
 }

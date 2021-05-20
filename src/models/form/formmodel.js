@@ -54,10 +54,10 @@ const FormSchema = new Schema({
     type: "string",
     required: true,
   },
-  approvers_numer_left: {
-    type: "number",
-    required: true,
-  },
+  // approvers_number_left: {
+  //   type: "number",
+  //   required: true,
+  // },
   status: {
     type: "string",
     required: true,
