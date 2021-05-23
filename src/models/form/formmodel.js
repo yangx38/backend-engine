@@ -38,17 +38,33 @@ const FormSchema = new Schema({
             type: "string",
             required: true,
           },
+          budgetamount: {
+            type: "number",
+            required: true,
+          },
           approvers: {
             type: "array",
-            required: false,
+            required: true,
+          },
+          status: {
+            type: "array",
+            required: true,
           },
           approver_comment: {
             type: "string",
-            required: false,
+            required: true,
+          },
+          approver_comment_time: {
+            type: "string",
+            required: true,
           },
         },
       },
     ],
+  },
+  approval_needed: {
+    type: "number",
+    required: true,
   },
   created_time: {
     type: "string",
@@ -58,7 +74,7 @@ const FormSchema = new Schema({
   //   type: "number",
   //   required: true,
   // },
-  status: {
+  form_status: {
     type: "string",
     required: true,
   },
