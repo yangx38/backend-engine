@@ -52,6 +52,13 @@ class FormCtl {
                 { used_budget: used_budgetCopy, approval_needed: approval_needed-1, form_status: 'approved by approvers' },
                 {safe: true, upsert: true, new : true},
             );
+        } else if (approval_needed === -1) {
+            // 判断 approval_needed 如果可以 edit之后这个要改
+            ctx.body = await FormModel.findByIdAndUpdate(
+                {_id: `${ctx.params._id}`}, 
+                { used_budget: used_budgetCopy, approval_needed: -1, form_status: 'declined by approvers' },
+                {safe: true, upsert: true, new : true},
+            );
         } else {
             ctx.body = await FormModel.findByIdAndUpdate(
                 {_id: `${ctx.params._id}`}, 
@@ -60,7 +67,30 @@ class FormCtl {
             );
         }
     }
-
+    async declineAnBudget(ctx) {
+        const idx = `${ctx.params.idx}`;
+        const ft_selected_formdata = await FormModel.findById(`${ctx.params._id}`);
+        const { used_budget } = ft_selected_formdata;
+        let used_budgetCopy = JSON.parse(JSON.stringify(used_budget)); 
+        const { approvers, status} = used_budgetCopy[idx];
+        used_budgetCopy[idx] = {...used_budgetCopy[idx], approver_comment: `${ctx.request.body.comment}`, approver_comment_time: `${ctx.request.body.approver_comment_time}`};
+        for (let i = 0; i < approvers.length; i++) {
+            if(approvers[i] === `${ctx.params.netId}`) {
+                status[i] = -1;
+                break;
+            }
+        }
+        ctx.body = await FormModel.findByIdAndUpdate(
+            {_id: `${ctx.params._id}`}, 
+            { used_budget: used_budgetCopy, approval_needed: -1, form_status: 'declined by approvers' },
+            {safe: true, upsert: true, new : true},
+        );
+    }
+    async getFormsFromSubmitterNetId(ctx) {
+        const formsFromSubmitterNetId = await FormModel.find({"form_creator_netId":`${ctx.params.netId}`}, '');
+        if (!formsFromSubmitterNetId) { ctx.throw(404); }
+        ctx.body = formsFromSubmitterNetId;
+    }
 
 
     
